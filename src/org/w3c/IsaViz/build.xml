@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<!--
+
+AUTHOR : Emmanuel Pietriga (emmanuel.pietriga@inria.fr)
+Copyright (c) INRIA, 2004-2006. All Rights Reserved
+Licensed under the GNU LGPL. For full terms see the file COPYING.
+$Id: build.xml,v 1.10 2007/04/17 12:46:36 epietrig Exp $
+
+Usage:
+- build bytecode from source code: 'ant', or 'ant isvbuild'
+- build bytecode from source code and create isaviz.jar: 'ant isvjar'
+- clean bytecode and javadoc: 'ant realclean'
+- clean old source files: 'ant clean'
+-->
+
+<project name="isaviz" default="isvbuild" basedir=".">
+  <description>IsaViz build file</description>
+  <path id="project.class.path">
+    <pathelement location="${basedir}/lib/zvtm.jar"/>
+    <pathelement location="${basedir}/lib/xercesImpl.jar"/>
+    <pathelement location="${basedir}/lib/xml-apis.jar"/>
+    <pathelement location="${basedir}/lib/antlr-2.7.5.jar"/>
+    <pathelement location="${basedir}/lib/jena/jena.jar"/>
+    <pathelement location="${basedir}/lib/jena/junit.jar"/>
+    <pathelement location="${basedir}/lib/sesame/openrdf-model.jar"/>
+    <pathelement location="${basedir}/lib/sesame/openrdf-util.jar"/>
+    <pathelement location="${basedir}/lib/sesame/sesame.jar"/>
+    <pathelement location="${basedir}/lib/sesame/rio.jar"/>
+    <pathelement location="${basedir}/plugins/arq.jar"/>
+  </path>
+
+  <target name="init">
+    <property name="classes.dir" value="${basedir}/classes"/>
+    <property name="apidocs.dir" value="${basedir}/apidocs"/>
+    <property name="img.dir" value="${basedir}/images"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="plg.dir" value="${basedir}/plugins"/>
+    <property name="tmp.dir" value="${basedir}/tmp"/>
+    <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${lib.dir}"/>
+    <mkdir dir="${tmp.dir}"/>
+    <mkdir dir="${apidocs.dir}"/>
+  </target>
+
+  <!--isv build-->
+  <target name="isvbuild" depends="init">
+    <javac srcdir="${src.dir}" destdir="${classes.dir}"
+           debug="on" deprecation="off" optimize="on"
+           includes="**/*java">
+      <classpath refid="project.class.path"/>
+    </javac>
+  </target>
+
+  <!--isv build-->
+  <target name="isvdepr" depends="init">
+    <javac srcdir="${src.dir}" destdir="${classes.dir}"
+           debug="on" deprecation="on" optimize="on"
+           includes="**/*java">
+      <classpath refid="project.class.path"/>
+    </javac>
+  </target>
+
+  <!--isvjar-->
+  <target name="isvjar" depends="init,isvbuild">
+    <jar destfile="${lib.dir}/isaviz.jar"
+         manifest="isv-manifest.mf">
+      <fileset dir="${classes.dir}"
+               includes="org/w3c/IsaViz/**"/>
+      <zipfileset dir="${img.dir}" prefix="images"/>
+    </jar>
+  </target>
+
+  <!--fsljar-->
+  <target name="fsljar" depends="init,isvbuild">
+    <jar destfile="${lib.dir}/isaviz-fsl.jar">
+      <fileset dir="${classes.dir}"
+               includes="org/w3c/IsaViz/fresnel/**"/>
+    </jar>
+  </target>
+
+  <!--plgjar (for the test plugin) -->
+  <target name="plgjar" depends="init,isvbuild">
+    <jar destfile="${plg.dir}/plgtest.jar">
+      <fileset dir="${classes.dir}"
+               includes="fr/inria/insitu/IsaViz/**"/>
+    </jar>
+  </target>
+
+  <!--documentation (javadoc)-->
+  <target name="fsldoc" depends="init,cleandoc">
+    <javadoc packagenames="org.w3c.IsaViz.fresnel.*"
+             sourcepath="${src.dir}" destdir="${apidocs.dir}" Overview="${src.dir}/org/w3c/IsaViz/fresnel/overview.html"
+             defaultexcludes="yes" author="true" version="true" use="true" public="true"
+             windowtitle="FSL API documentation">
+      <classpath refid="project.class.path"/>
+      <doctitle><![CDATA[<h1>FSL API documentation</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2005 INRIA. All Rights Reserved<br />Licensed under the GNU LGPL. For full terms see the file COPYING.</i>]]></bottom>
+    </javadoc>
+  </target>
+
+  <!--clean up classes (bytecode)-->
+  <target name="clean" depends="init">
+    <delete dir="${classes.dir}"/>
+  </target>
+
+  <!--clean up documentation-->
+  <target name="cleandoc" depends="init">
+    <delete dir="${apidocs.dir}"/>
+  </target>
+
+  <!--clean up classes, doc and old versions of source files-->
+  <target name="realclean" depends="clean, cleandoc">
+    <delete>
+      <fileset dir="${basedir}">
+        <include name="**/*~"/>
+        <include name="**/#*#"/>
+      </fileset>
+    </delete>
+  </target>
+
+</project>
+

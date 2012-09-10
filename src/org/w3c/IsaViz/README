@@ -1,0 +1,37 @@
+IsaViz 2.0 CVS alpha release
+------------------------------------------------------------------------------------------
+Instructions for installing and compiling the source files retrieved from CVS.
+------------------------------------------------------------------------------------------
+
+Note: if you already installed the source release IsaViz 1.x, you just need to get all .java files from CVS and put them in the src/org/w3c/IsaViz/ directory and then go to step 9).
+
+1) Create a directory named IsaViz/ somewhere on your system.
+2) Download all .java files from CVS and put them in IsaViz/src/org/w3c/IsaViz/
+3-a) Download the Makefile from CVS and put it in IsaViz/  (edit the file to change ISV_DIR to match your IsaViz directory and your JDK directory)
+	there are 2 makefiles: Makefile.cygwin and Makefile.linux : download one depending one your environment (linux will work for Linux Solaris and most POSIX systems) do not forget to rename the on you download to 'Makefile' before invoking 'make'
+3-b) Or download build.xml if you want to use Ant instead of Makefile (contributed by Arjohn Kampman)
+4) Download run.bat or run.sh from CVS and put it in IsaViz/
+5) Create a new directory IsaViz/classes/
+6) Create a new directory IsaViz/lib/
+7) Get Jena 2 (current version is 'preview 2') from HP's web site [1] or from their sourceforge CVS repository [2]
+   Important: IsaViz 2.0 will NOT work with Jena 2 preview 1
+8) Put the following JAR files from the Jena 2 distribution in directory IsaViz/lib/
+	antlr.debug.jar
+	icu4j.jar
+	jakarta-oro-2.0.5.jar
+	jena.jar
+	junit.jar
+	log4j-1.2.7.jar
+	rdf-api-2001-01-19.jar
+	xercesImpl.jar
+	xmlParserAPIs.jar
+9) Get ZVTM 0.8.2 or later from the ZVTM sourceforge site [3] - actually, the latest CVS version of ZVTM might be necessary (available on the sourceforge site)
+10) Put the following JAR file from the ZVTM distribution in direftory IsaViz/lib/
+	zvtm.jar
+11) type 'make' and then 'make isvjar'
+12) use run.bat or run.sh to launch IsaViz (edit the path to the java executable file if necessary)
+
+
+[1] http://www.hpl.hp.com/semweb/jena2.htm
+[2] http://sourceforge.net/projects/jena/
+[3] http://zvtm.sourceforge.net/
