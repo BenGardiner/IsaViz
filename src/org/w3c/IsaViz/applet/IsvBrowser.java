@@ -24,6 +24,7 @@ import java.io.*;
 import java.net.*;
 
 import com.xerox.VTM.engine.*;
+import com.xerox.VTM.engine.SwingWorker;
 import com.xerox.VTM.glyphs.*;
 import com.xerox.VTM.svg.SVGReader;
 import net.claribole.zvtm.engine.Location;

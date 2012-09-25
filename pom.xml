@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.w3c</groupId>
+  <artifactId>IsaViz</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>IsaViz</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jena.version>2.3</jena.version>
+    <antlr.version>2.7.5</antlr.version>
+    <xerces.version>2.7.1</xerces.version>
+    <xml-apis.version>1.3.02</xml-apis.version>
+    <zvtm.version>unknown</zvtm.version> <!-- use unknown binary zvtm jar re-deployed to in-project repo -->
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>fr.inria</groupId>
+      <artifactId>zvtm</artifactId>
+      <version>${zvtm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>${xerces.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>${xml-apis.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.jena</groupId>
+      <artifactId>jena</artifactId>
+      <version>${jena.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>xmlbeans-jsr173-api</artifactId>
+          <groupId>xmlbeans</groupId>
+        </exclusion>
+      </exclusions>
+	</dependency>
+	<dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>${antlr.version}</version>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+  <repository>
+    <id>repo</id>
+    <releases>
+        <enabled>true</enabled>
+        <checksumPolicy>ignore</checksumPolicy>
+    </releases>
+    <snapshots>
+        <enabled>false</enabled>
+    </snapshots>
+    <url>file://${project.basedir}/repo</url>
+  </repository>
+  <repository>
+    <id>thirdparty-releases</id>
+    <name>JBoss Thirdparty Releases</name>
+    <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases</url>
+  </repository>
+  <!--  
+  <repository>
+    <id>zvtm repository</id>
+    <url>http://zvtm.sourceforge.net/maven</url>
+  </repository>
+  -->
+  </repositories>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>1.5</source>
+                <target>1.5</target>
+                <excludes>
+                  <exclude>**/*Test.java</exclude>
+                  <exclude>**/*Tests.java</exclude>
+                </excludes>
+            </configuration>
+         </plugin>
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-surefire-plugin</artifactId>
+           <configuration>
+             <testSourceDirectory>src</testSourceDirectory>
+           </configuration>
+         </plugin>
+     </plugins>
+  </build>
+</project>
